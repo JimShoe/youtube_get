@@ -12,7 +12,7 @@ shows=(
 'https://www.youtube.com/user/1veritasium'
 )
 
-# Directory to download each episodes
+# Directory to download each episode
 DOWNDIR='/tmp'
 
 # Log of downloaded episodes
