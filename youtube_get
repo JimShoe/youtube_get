@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# Script to download YouTube videos from channels in a podcast fashion.
+
+# List of shows.
+shows=( 
+'https://www.youtube.com/user/EpicMealTime'
+'https://www.youtube.com/user/MyHarto'
+'https://www.youtube.com/user/lowemillhuntsville'
+'https://www.youtube.com/user/destinws2'
+)
+
+# Directory to download each episodes
+DOWNDIR='/tmp'
+
+# Log of downloaded episodes
+LOG='/tmp/yd-log'
+
+# Will grab the next x episodes if we haven't gotten episodes before
+CATCHUP=10
+
+cleanup()                                                                 # remove pid file upon exit
+{
+  rm -rf /tmp/$0.pid
+}
+
+[ -f /tmp/$0.pid ] && exit                                                # bail if pid file exists
+
+touch /tmp/$0.pid                                                         # create pid file
+
+for SUBURL in "${shows[@]}"; do
+  /usr/bin/youtube-dl -gt --get-filename $SUBURL | while read -r line
+  do
+    URL=$line                                                             # URL we are going to download
+    read OUT
+    DIR=$DOWNDIR/`basename $SUBURL`                                       # directory these files will be saved to
+    ID=`echo $OUT | sed 's/^.*-//;s/\..*//'`                              # video id
+    [ ! -f $LOG ] && touch $LOG                                           # create a log file if one doesn't exist
+    [ `grep -c $ID $LOG` -gt 0 ] && break                                 # If this video id is in log file break
+    [ ! -d $DIR ] && mkdir -p $DIR                                        # Create video directory if one doesn't exists
+    echo ""                                                               # print some stuff
+    echo -e "Downloading $OUT"
+    echo ""
+    wget --quiet --output-document=$DIR/`date +"%m_%d_%Y"`_$OUT $URL      # download the video 
+    [ $? -eq 0 ] && echo $ID >> $LOG                                      # save video id to log if the video download succeeded
+    (( CATCHUP-- ))                                                       # decrement catchup count
+    [ $CATCHUP == 0 ] && break                                            # break out if we are all caught up
+    [ $CATCHUP > 0 ] && sleep 300                                         # wait 5 min before downloading next video from YouTube
+  done
+done
+
+# call cleanup() on exit
+trap cleanup EXIT
