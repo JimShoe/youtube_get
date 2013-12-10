@@ -4,17 +4,21 @@
 
 # List of shows.
 shows=( 
-'https://www.youtube.com/user/EpicMealTime'
 'https://www.youtube.com/user/MyHarto'
 'https://www.youtube.com/user/lowemillhuntsville'
 'https://www.youtube.com/user/destinws2'
+'https://www.youtube.com/engineerguyvideo'
+'https://www.youtube.com/user/01032010814'
+'https://www.youtube.com/user/MentalFlossVideo'
+'https://www.youtube.com/user/StreamingTrailer'
+'https://www.youtube.com/user/1veritasium'
 )
 
 # Directory to download each episodes
-DOWNDIR='/tmp'
+DOWNDIR='/storage/1T/share/video/_new/youtube'
 
 # Log of downloaded episodes
-LOG='/tmp/yd-log'
+LOG='/home/deathstar/scripts/youtube_get/log'
 
 # Will grab the next x episodes if we haven't gotten episodes before
 CATCHUP=10
@@ -33,19 +37,19 @@ for SUBURL in "${shows[@]}"; do
   do
     URL=$line                                                             # URL we are going to download
     read OUT
-    DIR=$DOWNDIR/`basename $SUBURL`                                       # directory these files will be saved to
-    ID=`echo $OUT | sed 's/^.*-//;s/\..*//'`                              # video id
+    DIR=$DOWNDIR/$(basename $SUBURL)                                      # directory these files will be saved to
+    ID=$(echo $OUT | sed 's/^.*-//;s/\..*//')                             # video id
     [ ! -f $LOG ] && touch $LOG                                           # create a log file if one doesn't exist
     [ `grep -c $ID $LOG` -gt 0 ] && break                                 # If this video id is in log file break
     [ ! -d $DIR ] && mkdir -p $DIR                                        # Create video directory if one doesn't exists
     echo ""                                                               # print some stuff
     echo -e "Downloading $OUT"
     echo ""
-    wget --quiet --output-document=$DIR/`date +"%m_%d_%Y"`_$OUT $URL      # download the video 
+    wget --quiet --output-document=$DIR/$(date +"%m_%d_%Y")_"$OUT" $URL   # download the video 
     [ $? -eq 0 ] && echo $ID >> $LOG                                      # save video id to log if the video download succeeded
     (( CATCHUP-- ))                                                       # decrement catchup count
     [ $CATCHUP == 0 ] && break                                            # break out if we are all caught up
-    [ $CATCHUP > 0 ] && sleep 300                                         # wait 5 min before downloading next video from YouTube
+    [ $CATCHUP -gt 0 ] && sleep 300                                       # wait 5 min before downloading next video from YouTube
   done
 done
 
