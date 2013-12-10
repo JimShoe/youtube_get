@@ -5,20 +5,18 @@
 # List of shows.
 shows=( 
 'https://www.youtube.com/user/MyHarto'
-'https://www.youtube.com/user/lowemillhuntsville'
 'https://www.youtube.com/user/destinws2'
 'https://www.youtube.com/engineerguyvideo'
 'https://www.youtube.com/user/01032010814'
 'https://www.youtube.com/user/MentalFlossVideo'
-'https://www.youtube.com/user/StreamingTrailer'
 'https://www.youtube.com/user/1veritasium'
 )
 
 # Directory to download each episodes
-DOWNDIR='/storage/1T/share/video/_new/youtube'
+DOWNDIR='/tmp'
 
 # Log of downloaded episodes
-LOG='/home/deathstar/scripts/youtube_get/log'
+LOG='/tmp/yd-log'
 
 # Will grab the next x episodes if we haven't gotten episodes before
 CATCHUP=10
