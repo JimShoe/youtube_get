@@ -7,10 +7,10 @@ Config
 ------
 You will need to edit a few variables inside the script.
 
-shows: This is an array of youtube channels you want to download.
-DOWNDIR: Directory to download each episode.
-LOG: Log of downloaded episodes.
-CATCHUP: Number past episodes to download.
+* shows: This is an array of youtube channels you want to download.
+* DOWNDIR: Directory to download each episode.
+* LOG: Log of downloaded episodes.
+*  CATCHUP: Number past episodes to download.
 
 Notes
 -----
