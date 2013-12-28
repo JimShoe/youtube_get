@@ -23,12 +23,12 @@ CATCHUP=10
 
 cleanup()                                                                 # remove pid file upon exit
 {
-  rm -rf /tmp/$0.pid
+  rm -rf /tmp/youtube_get.pid
 }
 
-[ -f /tmp/$0.pid ] && exit                                                # bail if pid file exists
+[ -f /tmp/youtube_get.pid ] && exit                                                # bail if pid file exists
 
-touch /tmp/$0.pid                                                         # create pid file
+touch /tmp/youtube_get.pid                                                         # create pid file
 
 for SUBURL in "${shows[@]}"; do
   /usr/bin/youtube-dl -gt --get-filename $SUBURL | while read -r line
